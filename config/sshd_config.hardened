@@ -1,0 +1,51 @@
+# ==============================================================================
+# Enterprise-Hardened OpenSSH Daemon Configuration (sshd_config)
+# For securing chatbot servers, reverse proxies, and production database nodes.
+# ==============================================================================
+
+# 1. Network & Port Security
+Port 2222                          # Change default SSH port away from standard 22
+AddressFamily inet                 # Enforce IPv4 only (or inet6 if required)
+ListenAddress 0.0.0.0
+
+# 2. Authentication Rules
+PermitRootLogin no                 # Strictly disable direct root logins
+PubkeyAuthentication yes           # Enforce public key authentication
+AuthorizedKeysFile .ssh/authorized_keys
+PasswordAuthentication no          # Strictly disable password logins
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+KerberosAuthentication no
+GSSAPIAuthentication no
+UsePAM yes
+
+# 3. Cryptographic Ciphers & Key Exchange (Modern Post-Quantum / Quantum-Resistant)
+# Only allow strong modern symmetric ciphers (ChaCha20, AES-GCM)
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com
+# Enforce modern key exchange algorithms
+KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512
+# Strong MAC algorithms
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+
+# 4. Anti-Brute Force & Session Limits
+MaxAuthTries 3                     # Drop connection after 3 failed attempts
+MaxSessions 2                      # Limit concurrent interactive sessions
+LoginGraceTime 30                  # Disconnect unauthenticated attempts after 30s
+ClientAliveInterval 300            # Send keepalive every 5 minutes
+ClientAliveCountMax 2              # Disconnect idle client after 10 minutes
+
+# 5. Attack Surface Reduction
+X11Forwarding no                   # Disable graphical forwarding
+AllowAgentForwarding no            # Prevent SSH agent hijacking
+AllowTcpForwarding yes             # Allow secure tunnel forwarding if needed
+GatewayPorts no                    # Do not bind forwarded ports to external interface
+PrintMotd no
+PrintLastLog yes
+TCPKeepAlive yes
+
+# 6. Logging & Audit Trail
+LogLevel VERBOSE                   # Log detailed key fingerprints on authentication
+SyslogFacility AUTH
+
+# 7. User Access Control (Whitelist authorized deployers)
+# AllowUsers deployer admin devops

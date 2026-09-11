@@ -1,0 +1,250 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "hi",
+        "hello",
+        "hey",
+        "good morning",
+        "good afternoon",
+        "good evening",
+        "greetings",
+        "what's up",
+        "howdy",
+        "hey there"
+      ],
+      "regex_patterns": [
+        "^(hi|hello|hey|howdy)\\b"
+      ],
+      "responses": [
+        "Hello! How can I help you today?",
+        "Hi there! Welcome to our assistant. How can I be of service?",
+        "Greetings! What can I assist you with today?"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "bye",
+        "goodbye",
+        "see you",
+        "see ya",
+        "have a good day",
+        "talk to you later",
+        "exit",
+        "quit",
+        "bye bye"
+      ],
+      "regex_patterns": [
+        "\\b(bye|goodbye|see you|farewell)\\b"
+      ],
+      "responses": [
+        "Goodbye! Have a great day ahead.",
+        "See you soon! Feel free to reach out anytime.",
+        "Take care! Have a wonderful day."
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "thank you",
+        "thanks",
+        "thanks a lot",
+        "appreciate it",
+        "thank you so much",
+        "much appreciated",
+        "cheers"
+      ],
+      "regex_patterns": [
+        "\\b(thanks|thank you|appreciated)\\b"
+      ],
+      "responses": [
+        "You're very welcome!",
+        "Glad I could help!",
+        "Anytime! Let me know if there's anything else you need."
+      ]
+    },
+    {
+      "tag": "bot_identity",
+      "patterns": [
+        "who are you",
+        "what is your name",
+        "are you a human",
+        "what are you",
+        "tell me about yourself"
+      ],
+      "regex_patterns": [
+        "who are you",
+        "what('s| is) your name"
+      ],
+      "responses": [
+        "I am an intelligent rule-based and NLP hybrid chatbot assistant designed to answer questions and help with appointments!",
+        "I'm your virtual assistant powered by rule matching and NLP intent classification."
+      ]
+    },
+    {
+      "tag": "help",
+      "patterns": [
+        "help",
+        "what can you do",
+        "how does this work",
+        "options",
+        "show commands",
+        "what are your features"
+      ],
+      "regex_patterns": [
+        "^(help|commands|options|features)\\b"
+      ],
+      "responses": [
+        "I can help you with:\n1. 📅 Booking an appointment or table\n2. 🔍 Checking or cancelling an existing reservation\n3. 🕒 Business hours & location\n4. 💲 Pricing & cancellation policies\n\nWhat would you like to do?"
+      ]
+    },
+    {
+      "tag": "business_hours",
+      "patterns": [
+        "what are your hours",
+        "when are you open",
+        "opening times",
+        "closing time",
+        "what time do you close",
+        "are you open on weekends",
+        "operational hours",
+        "business hours"
+      ],
+      "regex_patterns": [
+        "\\b(open|opening|hours|closing time)\\b"
+      ],
+      "responses": [
+        "We are open Monday through Friday from 9:00 AM to 8:00 PM, and Saturday to Sunday from 10:00 AM to 6:00 PM."
+      ]
+    },
+    {
+      "tag": "location",
+      "patterns": [
+        "where are you located",
+        "what is your address",
+        "directions",
+        "how do i get there",
+        "where is your office",
+        "store location",
+        "find you"
+      ],
+      "regex_patterns": [
+        "\\b(where (are you|is the|is your)|address|location|directions)\\b"
+      ],
+      "responses": [
+        "We are located at 123 Innovation Way, Suite 400, Tech City. Free parking is available on-site!"
+      ]
+    },
+    {
+      "tag": "pricing",
+      "patterns": [
+        "how much does it cost",
+        "what are your prices",
+        "pricing plans",
+        "rates",
+        "service fee",
+        "cost of consultation",
+        "price list"
+      ],
+      "regex_patterns": [
+        "\\b(price|pricing|cost|rates|fee)\\b"
+      ],
+      "responses": [
+        "Our standard consultation is $50. Premium packages start at $120. Standard appointments can be booked free of charge with payment upon arrival."
+      ]
+    },
+    {
+      "tag": "cancellation_policy",
+      "patterns": [
+        "what is your cancellation policy",
+        "can i cancel my booking",
+        "refund policy",
+        "how to cancel",
+        "cancellation fees"
+      ],
+      "regex_patterns": [
+        "\\b(cancellation policy|refund policy|cancel policy)\\b"
+      ],
+      "responses": [
+        "You can cancel or reschedule for free up to 24 hours before your scheduled time. Late cancellations may incur a $20 fee."
+      ]
+    },
+    {
+      "tag": "book_appointment",
+      "patterns": [
+        "i want to book an appointment",
+        "book a table",
+        "schedule a consultation",
+        "make a reservation",
+        "book for 2 people tomorrow at 5pm",
+        "reserve a slot",
+        "i need an appointment",
+        "can i schedule a visit"
+      ],
+      "regex_patterns": [
+        "\\b(book|reserve|schedule)\\b.*\\b(appointment|table|slot|visit|consultation)\\b",
+        "^book\\b"
+      ],
+      "required_slots": [
+        "name",
+        "service",
+        "party_size",
+        "date",
+        "time"
+      ],
+      "slot_prompts": {
+        "name": "May I have your name for the booking?",
+        "service": "Which service would you like to book? (e.g., Consultation, Table, Support, Meeting)",
+        "party_size": "For how many people is this reservation?",
+        "date": "What date or day would you prefer? (e.g., Tomorrow, Friday, 2026-09-10)",
+        "time": "What time would you like to schedule? (e.g., 2:00 PM, 17:00, morning)"
+      },
+      "responses": [
+        "Great! Let's get your appointment scheduled."
+      ]
+    },
+    {
+      "tag": "check_booking_status",
+      "patterns": [
+        "check my appointment",
+        "check booking status",
+        "view my reservation",
+        "do i have an appointment",
+        "find my booking"
+      ],
+      "regex_patterns": [
+        "\\b(check|view|find|status of)\\b.*\\b(booking|appointment|reservation)\\b"
+      ],
+      "responses": [
+        "Let me look up your active booking details."
+      ]
+    },
+    {
+      "tag": "cancel_booking",
+      "patterns": [
+        "cancel my appointment",
+        "cancel my booking",
+        "i want to cancel my reservation",
+        "delete my booking",
+        "cancel reservation"
+      ],
+      "regex_patterns": [
+        "\\b(cancel|delete)\\b.*\\b(appointment|booking|reservation)\\b"
+      ],
+      "responses": [
+        "I can help you cancel your reservation."
+      ]
+    },
+    {
+      "tag": "fallback",
+      "patterns": [],
+      "regex_patterns": [],
+      "responses": [
+        "I'm not quite sure I understood that. You can ask for our opening hours, location, pricing, or say 'book an appointment' to make a reservation!",
+        "Could you please rephrase that? Type 'help' to see what I can assist you with."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+text,intent
+"hi there",greeting
+"hello assistant",greeting
+"hey how are you",greeting
+"good morning team",greeting
+"good afternoon to you",greeting
+"good evening folks",greeting
+"greetings everyone",greeting
+"howdy friend",greeting
+"hey what's up",greeting
+"hi chatbot",greeting
+"bye bye",goodbye
+"goodbye have a nice day",goodbye
+"see you later",goodbye
+"talk to you soon",goodbye
+"farewell assistant",goodbye
+"i am leaving now bye",goodbye
+"exit chat",goodbye
+"quit conversation",goodbye
+"have a wonderful day bye",goodbye
+"thank you very much",thanks
+"thanks for your help",thanks
+"i appreciate your support",thanks
+"thank you kindly",thanks
+"thanks a lot",thanks
+"much appreciated friend",thanks
+"cheers mate",thanks
+"many thanks",thanks
+"who are you exactly",bot_identity
+"what is your name assistant",bot_identity
+"are you an artificial intelligence or human",bot_identity
+"tell me about your creators",bot_identity
+"what kind of bot are you",bot_identity
+"introduce yourself",bot_identity
+"what can you help me with",help
+"show me available options",help
+"what features do you offer",help
+"can you help me please",help
+"show me the menu commands",help
+"what do you do",help
+"how does this chatbot work",help
+"when is your shop open",business_hours
+"what are the working hours",business_hours
+"are you guys open on sunday",business_hours
+"what time do you open tomorrow",business_hours
+"what time do you close tonight",business_hours
+"operating hours on weekends",business_hours
+"store timings please",business_hours
+"where is your office located",location
+"give me your physical address",location
+"how do i find your store",location
+"where can i visit you",location
+"what is your office location",location
+"driving directions to your place",location
+"how much do your services cost",pricing
+"what are your consultation fees",pricing
+"can you send me the price list",pricing
+"is there any charge for booking",pricing
+"how expensive are the packages",pricing
+"what are your standard rates",pricing
+"what happens if i cancel",cancellation_policy
+"what is your policy on refunds",cancellation_policy
+"can i get my money back if i cancel",cancellation_policy
+"is there a fee for cancelling an appointment",cancellation_policy
+"tell me about cancellation rules",cancellation_policy
+"i want to book a table for dinner",book_appointment
+"schedule an appointment for next week",book_appointment
+"can i make a reservation for 4 people",book_appointment
+"book a consultation session with an expert",book_appointment
+"reserve a meeting slot for tomorrow",book_appointment
+"i would like to schedule a visit",book_appointment
+"book an appointment please",book_appointment
+"reserve a spot for me",book_appointment
+"check status of my appointment",check_booking_status
+"do i have any active reservations",check_booking_status
+"look up my scheduled booking",check_booking_status
+"check my reservation details",check_booking_status
+"verify my appointment status",check_booking_status
+"i need to cancel my appointment",cancel_booking
+"please cancel my reservation",cancel_booking
+"cancel the booking under my name",cancel_booking
+"delete my scheduled visit",cancel_booking
+"remove my appointment from the schedule",cancel_booking

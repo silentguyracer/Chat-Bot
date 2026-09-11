@@ -3,22 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hybrid NLP & Rule Chatbot - Animated Web Client & SSH Security</title>
+  <title>AI Smart Assistant</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #3b82f6;
-      --primary-glow: rgba(59, 130, 246, 0.4);
-      --accent: #8b5cf6;
-      --accent-glow: rgba(139, 92, 246, 0.4);
-      --cyan: #06b6d4;
-      --emerald: #10b981;
+      --primary-hover: #2563eb;
+      --primary-glow: rgba(59, 130, 246, 0.35);
       --bg: #090d16;
-      --panel-bg: rgba(17, 24, 39, 0.75);
-      --card-bg: rgba(30, 41, 59, 0.6);
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --bubble-bot: rgba(30, 41, 59, 0.75);
       --border: rgba(255, 255, 255, 0.08);
-      --border-glow: rgba(59, 130, 246, 0.3);
       --text: #f8fafc;
       --text-muted: #94a3b8;
     }
@@ -36,7 +32,7 @@
       position: relative;
     }
 
-    /* Animated Canvas Background */
+    /* Ambient animated lighting */
     #particleCanvas {
       position: fixed;
       top: 0;
@@ -47,32 +43,32 @@
       pointer-events: none;
     }
 
-    /* Ambient glowing gradient orbs */
     .ambient-orb {
       position: fixed;
       border-radius: 50%;
-      filter: blur(120px);
+      filter: blur(140px);
       z-index: 0;
       pointer-events: none;
-      opacity: 0.25;
-      animation: floatOrb 18s ease-in-out infinite alternate;
+      opacity: 0.22;
+      animation: floatOrb 20s ease-in-out infinite alternate;
     }
-    .orb-1 { width: 500px; height: 500px; background: #3b82f6; top: -100px; left: -100px; }
-    .orb-2 { width: 600px; height: 600px; background: #8b5cf6; bottom: -150px; right: -100px; animation-delay: -9s; }
+    .orb-1 { width: 550px; height: 550px; background: #3b82f6; top: -120px; left: -100px; }
+    .orb-2 { width: 600px; height: 600px; background: #8b5cf6; bottom: -150px; right: -120px; animation-delay: -10s; }
 
     @keyframes floatOrb {
       0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(60px, 40px) scale(1.1); }
-      100% { transform: translate(-40px, 80px) scale(0.95); }
+      50% { transform: translate(60px, 40px) scale(1.08); }
+      100% { transform: translate(-40px, 70px) scale(0.95); }
     }
 
+    /* Clean Navbar */
     header {
       position: relative;
       z-index: 10;
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(16px);
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
-      padding: 14px 32px;
+      padding: 16px 36px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -82,18 +78,13 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 1.2rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #60a5fa, #c084fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      text-decoration: none;
     }
 
     .brand-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
       background: linear-gradient(135deg, #3b82f6, #8b5cf6);
       display: flex;
       align-items: center;
@@ -102,154 +93,149 @@
       box-shadow: 0 0 16px var(--primary-glow);
     }
 
-    .nav-tabs {
-      display: flex;
-      gap: 8px;
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
     }
 
-    .tab-btn {
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #4ade80;
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 8px #4ade80;
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-reset {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
       padding: 8px 16px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
-      background: transparent;
-      color: var(--text-muted);
-      border: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       transition: all 0.2s ease;
     }
-    .tab-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
-    .tab-btn.active {
-      background: rgba(59, 130, 246, 0.15);
-      color: #60a5fa;
-      border-color: rgba(59, 130, 246, 0.3);
-      box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
+    .btn-reset:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
     }
 
-    .main-layout {
+    /* Main Container (Clean Centered Chat App) */
+    .app-container {
       position: relative;
       z-index: 10;
       flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 440px;
-      gap: 24px;
-      padding: 24px 32px;
-      max-width: 1560px;
+      display: flex;
+      justify-content: center;
+      padding: 24px 20px;
+      max-width: 1000px;
       margin: 0 auto;
       width: 100%;
     }
 
-    /* Glass Panels */
-    .glass-panel {
-      background: var(--panel-bg);
-      backdrop-filter: blur(20px);
+    .chat-card {
+      width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      transition: border-color 0.3s ease;
-    }
-    .glass-panel:hover {
-      border-color: var(--border-glow);
-    }
-
-    /* Chat Area */
-    .chat-panel {
       height: calc(100vh - 130px);
     }
 
-    .panel-header {
-      padding: 16px 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .live-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
-      color: #4ade80;
-      background: rgba(34, 197, 94, 0.1);
-      padding: 4px 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(34, 197, 94, 0.2);
-    }
-    .pulse-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #4ade80;
-      box-shadow: 0 0 8px #4ade80;
-      animation: pulse 1.6s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.4); opacity: 0.6; }
-    }
-
+    /* Message Stream */
     .messages-container {
       flex: 1;
-      padding: 24px;
+      padding: 28px 32px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 20px;
       scroll-behavior: smooth;
     }
 
-    /* Message Bubbles */
     .msg-wrapper {
       display: flex;
-      gap: 12px;
+      gap: 14px;
       animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     .msg-user-wrapper { justify-content: flex-end; }
     .msg-bot-wrapper { justify-content: flex-start; }
 
     @keyframes popIn {
-      0% { opacity: 0; transform: translateY(12px) scale(0.96); }
+      0% { opacity: 0; transform: translateY(14px) scale(0.97); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .msg-avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 17px;
       flex-shrink: 0;
     }
-    .avatar-bot { background: linear-gradient(135deg, #3b82f6, #8b5cf6); box-shadow: 0 0 10px var(--primary-glow); }
-    .avatar-user { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
+    .avatar-bot {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      box-shadow: 0 0 14px var(--primary-glow);
+    }
+    .avatar-user {
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    }
 
     .msg-bubble {
-      max-width: 78%;
-      padding: 12px 18px;
-      border-radius: 16px;
-      font-size: 0.95rem;
-      line-height: 1.5;
+      max-width: 75%;
+      padding: 14px 20px;
+      border-radius: 18px;
+      font-size: 0.98rem;
+      line-height: 1.55;
       white-space: pre-wrap;
       word-break: break-word;
     }
     .bubble-bot {
-      background: rgba(30, 41, 59, 0.8);
+      background: var(--bubble-bot);
       border: 1px solid var(--border);
       color: #f1f5f9;
       border-top-left-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     }
     .bubble-user {
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: #fff;
+      color: #ffffff;
       border-top-right-radius: 4px;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
     }
 
     /* Typing Indicator Waveform */
@@ -257,10 +243,10 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 12px 18px;
-      background: rgba(30, 41, 59, 0.8);
+      padding: 14px 20px;
+      background: var(--bubble-bot);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 18px;
       border-top-left-radius: 4px;
       width: fit-content;
     }
@@ -279,179 +265,92 @@
       30% { transform: translateY(-7px); }
     }
 
-    /* Quick suggestions pills */
+    /* Quick suggestions bar */
     .quick-bar {
-      padding: 10px 24px;
+      padding: 12px 28px;
       display: flex;
-      gap: 8px;
+      gap: 10px;
       overflow-x: auto;
       background: rgba(15, 23, 42, 0.4);
       border-top: 1px solid var(--border);
+      scrollbar-width: none;
     }
+    .quick-bar::-webkit-scrollbar { display: none; }
+
     .pill {
-      background: rgba(59, 130, 246, 0.12);
+      background: rgba(59, 130, 246, 0.1);
       border: 1px solid rgba(59, 130, 246, 0.25);
       color: #93c5fd;
-      padding: 6px 14px;
+      padding: 8px 16px;
       border-radius: 20px;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 500;
       white-space: nowrap;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      font-family: inherit;
     }
     .pill:hover {
       background: rgba(59, 130, 246, 0.25);
-      color: #fff;
-      transform: translateY(-1px);
-      box-shadow: 0 2px 8px var(--primary-glow);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--primary-glow);
     }
 
     /* Input Bar */
     .input-bar {
-      padding: 16px 24px;
+      padding: 18px 28px;
       border-top: 1px solid var(--border);
       display: flex;
-      gap: 12px;
+      gap: 14px;
       background: rgba(15, 23, 42, 0.6);
+      align-items: center;
     }
+
     .chat-input {
       flex: 1;
-      background: rgba(15, 23, 42, 0.8);
+      background: rgba(15, 23, 42, 0.85);
       border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 12px 20px;
+      border-radius: 28px;
+      padding: 14px 24px;
       color: #fff;
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       outline: none;
       font-family: inherit;
-      transition: all 0.2s;
+      transition: all 0.25s ease;
     }
     .chat-input:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 16px var(--primary-glow);
+      border-color: var(--primary);
+      box-shadow: 0 0 20px var(--primary-glow);
+      background: rgba(15, 23, 42, 0.95);
     }
+    .chat-input::placeholder {
+      color: #64748b;
+    }
+
     .send-btn {
       background: linear-gradient(135deg, #3b82f6, #6366f1);
       border: none;
       color: white;
-      padding: 0 22px;
+      padding: 0 24px;
+      height: 48px;
       border-radius: 24px;
       font-weight: 600;
       font-size: 0.95rem;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      box-shadow: 0 4px 14px var(--primary-glow);
-      transition: all 0.2s;
+      gap: 8px;
+      box-shadow: 0 4px 16px var(--primary-glow);
+      transition: all 0.2s ease;
+      font-family: inherit;
     }
     .send-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px var(--primary-glow);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--primary-glow);
     }
-
-    /* Sidebar Content */
-    .sidebar-panel {
-      height: calc(100vh - 130px);
-      padding: 20px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .card-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: #38bdf8;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* Confidence Meter */
-    .meter-container {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-    .meter-svg {
-      width: 72px;
-      height: 72px;
-      transform: rotate(-90deg);
-    }
-    .meter-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 6; }
-    .meter-circle {
-      fill: none;
-      stroke: url(#meterGrad);
-      stroke-width: 6;
-      stroke-linecap: round;
-      stroke-dasharray: 188.4;
-      stroke-dashoffset: 0;
-      transition: stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .meter-info {
-      flex: 1;
-    }
-    .meter-tag {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #fff;
-    }
-    .meter-badge {
-      display: inline-block;
-      margin-top: 4px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      background: rgba(59, 130, 246, 0.2);
-      color: #93c5fd;
-    }
-
-    .code-box {
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      color: #38bdf8;
-      overflow-x: auto;
-      user-select: all;
-    }
-
-    /* SSH Keygen Tab Section */
-    .ssh-box {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      border-radius: 14px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .action-btn {
-      background: linear-gradient(135deg, #8b5cf6, #6366f1);
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .action-btn:hover {
-      box-shadow: 0 0 16px var(--accent-glow);
+    .send-btn:active {
+      transform: translateY(0);
     }
   </style>
 </head>
@@ -466,109 +365,62 @@
   <header>
     <div class="brand">
       <div class="brand-icon">🤖</div>
-      <span>Hybrid NLP Chatbot</span>
+      <div class="brand-text">
+        <h1>Smart Assistant</h1>
+        <div class="status-badge">
+          <div class="status-dot"></div>
+          <span>Online & Ready to Help</span>
+        </div>
+      </div>
     </div>
-    <div class="nav-tabs">
-      <button class="tab-btn active" id="tabChatBtn">💬 Live Chat</button>
-      <button class="tab-btn" id="tabSshBtn">🔐 SSH Security</button>
-      <button class="tab-btn" id="tabDocsBtn" onclick="window.open('/docs', '_blank')">📖 Swagger Docs</button>
+    <div class="nav-actions">
+      <button class="btn-reset" id="resetBtn" title="Start a fresh conversation">
+        <span>🔄</span>
+        <span>New Chat</span>
+      </button>
     </div>
   </header>
 
-  <!-- Main Dual-Pane Layout -->
-  <div class="main-layout">
-    
-    <!-- Chat Interface -->
-    <div class="glass-panel chat-panel" id="chatView">
-      <div class="panel-header">
-        <span style="font-weight:700; font-size:1.05rem;">Interactive Dialogue Stream</span>
-        <div class="live-badge">
-          <div class="pulse-dot"></div>
-          <span>FastAPI REST Connected</span>
-        </div>
-      </div>
-
+  <!-- Clean Full-Width Chat Container -->
+  <div class="app-container">
+    <div class="chat-card">
+      
+      <!-- Messages Stream -->
       <div class="messages-container" id="messagesContainer">
         <div class="msg-wrapper msg-bot-wrapper">
           <div class="msg-avatar avatar-bot">🤖</div>
-          <div class="msg-bubble bubble-bot">👋 Welcome! Ask about our business hours, location, pricing, or book an appointment to test the multi-turn slot filling!</div>
+          <div class="msg-bubble bubble-bot">👋 Hello! How can I assist you today? Feel free to ask about our business hours, location, pricing, or book a reservation!</div>
         </div>
       </div>
 
-      <!-- Quick Action Pills -->
+      <!-- Quick Action Suggestions -->
       <div class="quick-bar">
-        <button class="pill" data-text="What are your business hours?">🕒 Hours</button>
-        <button class="pill" data-text="Book a table for 4 tomorrow at 7pm">📅 Book Table (4 pax)</button>
-        <button class="pill" data-text="What is your pricing?">💲 Pricing</button>
-        <button class="pill" data-text="opning our and locashun">🔤 Typo Test</button>
+        <button class="pill" data-text="What are your business hours?">🕒 Business Hours</button>
+        <button class="pill" data-text="Where are you located?">📍 Location & Address</button>
+        <button class="pill" data-text="What is your pricing?">💲 Pricing & Services</button>
+        <button class="pill" data-text="I want to book an appointment">📅 Book an Appointment</button>
       </div>
 
-      <!-- Input Bar -->
+      <!-- User Input Bar -->
       <div class="input-bar">
-        <input type="text" id="chatInput" class="chat-input" placeholder="Type a message or slot answer..." autocomplete="off" />
-        <button id="sendBtn" class="send-btn">Send ➔</button>
-      </div>
-    </div>
-
-    <!-- Sidebar Diagnostics / SSH Panel -->
-    <div class="glass-panel sidebar-panel" id="sidebarView">
-      
-      <!-- Diagnostic View (Default) -->
-      <div id="diagSection" style="display:flex; flex-direction:column; gap:16px;">
-        <div class="card-title">🎯 Intent & Confidence Gauge</div>
-        
-        <div class="meter-container">
-          <svg class="meter-svg" viewBox="0 0 72 72">
-            <defs>
-              <linearGradient id="meterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#38bdf8"/>
-                <stop offset="100%" stop-color="#818cf8"/>
-              </linearGradient>
-            </defs>
-            <circle class="meter-bg" cx="36" cy="36" r="30"></circle>
-            <circle class="meter-circle" id="meterCircle" cx="36" cy="36" r="30"></circle>
-          </svg>
-          <div class="meter-info">
-            <div class="meter-tag" id="intentTag">greeting</div>
-            <div class="meter-badge" id="methodBadge">EXACT RULE (1.00)</div>
-          </div>
-        </div>
-
-        <div class="card-title">🧩 Slot Memory State</div>
-        <div class="code-box" id="slotStateBox">{}</div>
-
-        <div class="card-title">📦 Embed in WebApp</div>
-        <div style="font-size:0.8rem; color:var(--text-muted);">Add this single line to any webapp:</div>
-        <div class="code-box">&lt;script src="http://localhost:8000/static/widget.js"&gt;&lt;/script&gt;</div>
-      </div>
-
-      <!-- SSH Security View -->
-      <div id="sshSection" style="display:none; flex-direction:column; gap:16px;">
-        <div class="card-title" style="color:#c084fc;">🔐 Ed25519 SSH Key Generator</div>
-        <div class="ssh-box">
-          <div style="font-size:0.82rem; color:var(--text-muted);">Generate cryptographic keypairs for signing requests:</div>
-          <button class="action-btn" id="genKeyBtn">⚡ Generate Ed25519 Keypair</button>
-          <div style="font-size:0.75rem; color:var(--text-muted);">Public Key (OpenSSH):</div>
-          <div class="code-box" id="pubKeyBox">(Click generate above)</div>
-        </div>
-
-        <div class="card-title" style="color:#c084fc;">🛡️ Hardened SSH Server Config</div>
-        <div style="font-size:0.8rem; color:var(--text-muted);">Production SSH daemon config (`sshd_config.hardened`):</div>
-        <div class="code-box">PasswordAuthentication no
-PermitRootLogin no
-PubkeyAuthentication yes
-Ciphers chacha20-poly1305@openssh.com
-MaxAuthTries 3</div>
-
-        <div class="card-title" style="color:#c084fc;">🌐 Secure Tunnel Command</div>
-        <div class="code-box">ssh -N -L 8000:localhost:8000 ubuntu@your-server-ip</div>
+        <input 
+          type="text" 
+          id="chatInput" 
+          class="chat-input" 
+          placeholder="Ask anything or schedule a booking..." 
+          autocomplete="off" 
+          autofocus
+        />
+        <button id="sendBtn" class="send-btn">
+          <span>Send</span>
+          <span>➔</span>
+        </button>
       </div>
 
     </div>
-
   </div>
 
-  <!-- Particle Canvas Script -->
+  <!-- Animated Background Canvas -->
   <script>
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
@@ -585,10 +437,10 @@ MaxAuthTries 3</div>
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.6;
-        this.vy = (Math.random() - 0.5) * 0.6;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
         this.size = Math.random() * 2 + 1;
-        this.alpha = Math.random() * 0.5 + 0.2;
+        this.alpha = Math.random() * 0.4 + 0.15;
       }
       update() {
         this.x += this.vx;
@@ -606,7 +458,7 @@ MaxAuthTries 3</div>
       }
     }
 
-    for (let i = 0; i < 45; i++) particles.push(new Particle());
+    for (let i = 0; i < 40; i++) particles.push(new Particle());
 
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -616,43 +468,14 @@ MaxAuthTries 3</div>
     animate();
   </script>
 
-  <!-- Interactive Chat & SSH Script -->
+  <!-- Clean Front-End Chat Logic -->
   <script>
     const messagesContainer = document.getElementById('messagesContainer');
     const chatInput = document.getElementById('chatInput');
     const sendBtn = document.getElementById('sendBtn');
-    const intentTag = document.getElementById('intentTag');
-    const methodBadge = document.getElementById('methodBadge');
-    const meterCircle = document.getElementById('meterCircle');
-    const slotStateBox = document.getElementById('slotStateBox');
-    
-    // Tab switching
-    const tabChatBtn = document.getElementById('tabChatBtn');
-    const tabSshBtn = document.getElementById('tabSshBtn');
-    const diagSection = document.getElementById('diagSection');
-    const sshSection = document.getElementById('sshSection');
+    const resetBtn = document.getElementById('resetBtn');
 
-    tabChatBtn.addEventListener('click', () => {
-      tabChatBtn.classList.add('active');
-      tabSshBtn.classList.remove('active');
-      diagSection.style.display = 'flex';
-      sshSection.style.display = 'none';
-    });
-
-    tabSshBtn.addEventListener('click', () => {
-      tabSshBtn.classList.add('active');
-      tabChatBtn.classList.remove('active');
-      diagSection.style.display = 'none';
-      sshSection.style.display = 'flex';
-    });
-
-    const sessionId = 'web_animated_' + Math.random().toString(36).substring(2, 8);
-
-    function updateGauge(confidence) {
-      const circumference = 188.4;
-      const offset = circumference - (confidence * circumference);
-      meterCircle.style.strokeDashoffset = offset;
-    }
+    let sessionId = 'user_' + Math.random().toString(36).substring(2, 9);
 
     function appendMessage(text, isUser = false) {
       const wrapper = document.createElement('div');
@@ -717,28 +540,24 @@ MaxAuthTries 3</div>
         removeTypingIndicator();
 
         if (!res.ok) {
-          appendMessage('⚠️ Error processing message. Please try again.');
+          appendMessage("I'm sorry, I encountered an issue processing that. Please try again.");
           return;
         }
 
         const data = await res.json();
         appendMessage(data.response);
-
-        // Update Diagnostics UI
-        intentTag.textContent = data.intent;
-        methodBadge.textContent = `${data.method.toUpperCase()} (${Number(data.confidence).toFixed(2)})`;
-        updateGauge(data.confidence);
-        slotStateBox.textContent = JSON.stringify(data.slots || {}, null, 2);
       } catch (err) {
         removeTypingIndicator();
-        appendMessage('⚠️ Connection error connecting to backend.');
+        appendMessage("Unable to connect to the server right now. Please check your connection.");
       }
     }
 
     sendBtn.addEventListener('click', () => sendMessage());
-    chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
 
-    // Quick Action Pills
+    // Quick suggestion pills click
     document.querySelectorAll('.pill').forEach(pill => {
       pill.addEventListener('click', (e) => {
         const text = e.target.getAttribute('data-text');
@@ -746,26 +565,17 @@ MaxAuthTries 3</div>
       });
     });
 
-    // SSH Keygen Button
-    const genKeyBtn = document.getElementById('genKeyBtn');
-    const pubKeyBox = document.getElementById('pubKeyBox');
-    genKeyBtn.addEventListener('click', async () => {
-      genKeyBtn.textContent = 'Generating...';
-      try {
-        const res = await fetch('/api/ssh/generate-keys?key_type=ed25519', { method: 'POST' });
-        const data = await res.json();
-        pubKeyBox.textContent = data.public_key;
-        genKeyBtn.textContent = '✓ Ed25519 Keys Generated';
-      } catch (err) {
-        genKeyBtn.textContent = 'Error generating keys';
-      }
+    // New Chat Button
+    resetBtn.addEventListener('click', () => {
+      sessionId = 'user_' + Math.random().toString(36).substring(2, 9);
+      messagesContainer.innerHTML = `
+        <div class="msg-wrapper msg-bot-wrapper">
+          <div class="msg-avatar avatar-bot">🤖</div>
+          <div class="msg-bubble bubble-bot">👋 Hello! How can I assist you today? Feel free to ask about our business hours, location, pricing, or book a reservation!</div>
+        </div>
+      `;
+      chatInput.focus();
     });
-
-    // Initial Gauge State
-    updateGauge(1.0);
   </script>
-
-  <!-- Embeddable Widget Instance -->
-  <script src="/static/widget.js"></script>
 </body>
 </html>

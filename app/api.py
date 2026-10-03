@@ -1,5 +1,7 @@
 import os
 import sys
+import json
+import asyncio
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 
@@ -8,7 +10,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
-from fastapi import FastAPI, Depends, Request, HTTPException, Header, status
+from fastapi import FastAPI, Depends, Request, WebSocket, WebSocketDisconnect, HTTPException, Header, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -23,11 +25,12 @@ from src.security import (
     DEFAULT_API_KEY
 )
 from src.ssh_security import SSHKeyManager, SSHCryptographicSigner, SSHTunnelHelper
+from src.analytics import analytics_engine
 
 app = FastAPI(
-    title="Rule-Based & NLP Hybrid Chatbot API (with SSH Security)",
-    description="Production-ready conversational API with rate limiting, input sanitization, Ed25519 SSH signature verification, and SQL persistence.",
-    version="1.1.0"
+    title="Advanced Rule-Based & NLP Hybrid Chatbot API",
+    description="Advanced conversational API with WebSockets, Voice integration, sentiment analysis, digression handling, SSH Ed25519 authentication, and SQL persistence.",
+    version="2.0.0"
 )
 
 # Enable CORS for cross-origin web app embedding
@@ -76,6 +79,7 @@ class ChatResponse(BaseModel):
     intent: str
     method: str
     confidence: float
+    sentiment: Optional[str] = "neutral"
     slots: Dict[str, Any]
     pending_slot: Optional[str] = None
     active_booking: Optional[Dict[str, Any]] = None
@@ -98,12 +102,13 @@ async def health_check():
     """Health check endpoint to verify backend service status."""
     return {
         "status": "healthy",
-        "service": "Rule-Based & NLP Hybrid Chatbot",
+        "service": "Advanced Hybrid NLP Chatbot v2.0",
         "database": "SQLite Connected",
-        "security": {
-            "api_key_enforced": SecurityConfig.ENFORCE_API_KEY,
-            "rate_limit_per_min": SecurityConfig.RATE_LIMIT_REQUESTS,
-            "ssh_ed25519_auth_available": True
+        "features": {
+            "websockets": True,
+            "sentiment_analysis": True,
+            "digression_handling": True,
+            "ssh_ed25519_auth": True
         }
     }
 
@@ -116,8 +121,7 @@ async def health_check():
 )
 async def chat_endpoint(payload: ChatRequest):
     """
-    Process user message through NLP & Rule engine with SQL logging.
-    Protected by rate limiting, XSS sanitization, and API key verification.
+    Process user message through advanced NLP, sentiment, digression, and rule engine.
     """
     sanitized_msg = sanitize_input(payload.message)
     if not sanitized_msg:
@@ -130,6 +134,45 @@ async def chat_endpoint(payload: ChatRequest):
     return result
 
 
+# --- Real-Time Full-Duplex WebSocket Endpoint ---
+
+@app.websocket("/ws/chat/{session_id}")
+async def websocket_chat(websocket: WebSocket, session_id: str):
+    """
+    Full-duplex real-time streaming WebSocket endpoint.
+    Receives JSON messages: {"message": "hello"}
+    Sends real-time response payload + typing simulation events.
+    """
+    await websocket.accept()
+    try:
+        while True:
+            data_text = await websocket.receive_text()
+            try:
+                data = json.loads(data_text)
+                user_msg = data.get("message", "").strip()
+            except json.JSONDecodeError:
+                user_msg = data_text.strip()
+
+            if not user_msg:
+                continue
+
+            # Emit typing indicator event
+            await websocket.send_json({"type": "typing", "is_typing": True})
+            await asyncio.sleep(0.3)
+
+            # Process through hybrid chatbot
+            sanitized = sanitize_input(user_msg)
+            result = chatbot.respond(sanitized, session_id=session_id)
+
+            # Emit bot response event
+            await websocket.send_json({
+                "type": "message",
+                "payload": result
+            })
+    except WebSocketDisconnect:
+        pass
+
+
 @app.post(
     "/api/secure-chat",
     response_model=ChatResponse,
@@ -138,10 +181,8 @@ async def chat_endpoint(payload: ChatRequest):
 )
 async def secure_chat_endpoint(payload: SecureChatRequest):
     """
-    Cryptographically authenticated chat endpoint.
-    Requires incoming request payload to be signed by client's Ed25519 SSH private key.
+    Cryptographically authenticated chat endpoint using Ed25519 SSH signature verification.
     """
-    # 1. Verify Ed25519 cryptographic signature
     raw_payload_bytes = f"{payload.message}:{payload.session_id}".encode("utf-8")
     is_valid = SSHCryptographicSigner.verify_message(
         public_key_openssh=payload.public_key,
@@ -152,10 +193,9 @@ async def secure_chat_endpoint(payload: SecureChatRequest):
     if not is_valid:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid Ed25519 cryptographic SSH signature. Request may be tampered or unauthenticated."
+            detail="Invalid Ed25519 cryptographic SSH signature."
         )
 
-    # 2. Sanitize and process
     sanitized_msg = sanitize_input(payload.message)
     result = chatbot.respond(sanitized_msg, session_id=payload.session_id)
     return result
@@ -165,9 +205,7 @@ async def secure_chat_endpoint(payload: SecureChatRequest):
 
 @app.post("/api/ssh/generate-keys", tags=["SSH Security"])
 async def generate_ssh_keys(key_type: str = "ed25519", comment: str = "chatbot-web-client"):
-    """
-    Generate fresh SSH keypair (Ed25519 or RSA-4096) directly in browser for secure API signing or server access.
-    """
+    """Generate fresh SSH keypair (Ed25519 or RSA-4096)."""
     if key_type.lower() == "rsa":
         keys = SSHKeyManager.generate_rsa_keypair(key_size=4096, comment=comment)
     else:
@@ -185,6 +223,22 @@ async def get_tunnel_command(remote_host: str = "your-server-ip.com", remote_use
         "reverse_tunnel": SSHTunnelHelper.get_reverse_tunnel_command(
             remote_user=remote_user, remote_host=remote_host, local_port=port, remote_port=port
         )
+    }
+
+
+# --- Analytics & Operations Endpoints ---
+
+@app.get("/api/analytics/dashboard", tags=["Analytics"])
+async def get_analytics():
+    """Retrieve dialogue funnels, completion rates, and sentiment statistics."""
+    return analytics_engine.get_summary()
+
+
+@app.get("/api/escalations", tags=["Analytics"])
+async def get_escalations():
+    """Retrieve sessions flagged for human agent handoff."""
+    return {
+        "escalations": analytics_engine.escalations
     }
 
 
